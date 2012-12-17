@@ -82,16 +82,6 @@ execute "glance-manage db_sync" do
   notifies :restart, resources(:service => "glance-registry"), :immediately
 end
 
-# Having to manually version the database because of Ubuntu bug
-# https://bugs.launchpad.net/ubuntu/+source/glance/+bug/981111
-execute "glance-manage version_control" do
-  command "sudo -u glance glance-manage version_control 0"
-  action :nothing
-  not_if "sudo -u glance glance-manage db_version"
-  notifies :run, resources(:execute => "glance-manage db_sync"), :immediately
-  only_if { platform?(%w{ubuntu debian}) }
-end
-
 file "/var/lib/glance/glance.sqlite" do
   action :delete
 end
@@ -158,7 +148,7 @@ template "/etc/glance/glance-registry.conf" do
     "use_syslog" => node["glance"]["syslog"]["use"],
     "log_facility" => node["glance"]["syslog"]["facility"]
     )
-  notifies :run, resources(:execute => "glance-manage version_control"), :immediately
+  notifies :run, resources(:execute => "glance-manage db_sync"), :immediately
 end
 
 template "/etc/glance/glance-registry-paste.ini" do
