@@ -24,13 +24,16 @@ package "curl" do
   action :upgrade
 end
 
-package "python-keystone" do
-  action :install
+platform_options["python_packages"].each do |pkg|
+  package pkg do
+    action :install
+  end
 end
 
 platform_options["glance_packages"].each do |pkg|
   package pkg do
     action :upgrade
+    options platform_options["package_options"]
   end
 end
 

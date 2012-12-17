@@ -33,8 +33,10 @@ end
 # Set a secure keystone service password
 node.set_unless['glance']['service_pass'] = secure_password
 
-package "python-keystone" do
-  action :install
+platform_options["python_packages"].each do |pkg|
+  package pkg do
+    action :install
+  end
 end
 
 ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
@@ -64,6 +66,7 @@ end
 platform_options["glance_packages"].each do |pkg|
   package pkg do
     action :upgrade
+    options platform_options["package_options"]
   end
 end
 

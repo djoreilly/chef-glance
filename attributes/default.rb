@@ -68,7 +68,8 @@ when "fedora", "redhat", "centos"
     "glance_api_service" => "openstack-glance-api",                 # node_attribute
     "glance_registry_service" => "openstack-glance-registry",       # node_attribute
     "glance_api_process_name" => "glance-api",                      # node_attribute
-    "package_overrides" => ""                                       # node_attribute
+    "python_packages" => [ "python-keystone" ],
+    "package_options" => ""                                       # node_attribute
   }
 when "ubuntu"
   default["glance"]["platform"] = {
@@ -77,6 +78,7 @@ when "ubuntu"
     "glance_api_service" => "glance-api",                           # node_attribute
     "glance_registry_service" => "glance-registry",                 # node_attribute
     "glance_registry_process_name" => "glance-registry",            # node_attribute
-    "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'" # node_attribute
+    "python_packages" => [ "python-keystone" ],
+    "package_options" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'" # node_attribute
   }
 end
