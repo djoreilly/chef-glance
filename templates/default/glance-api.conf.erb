@@ -254,6 +254,9 @@ scrubber_datadir = /var/lib/glance/scrubber
 # Base directory that the Image Cache uses
 image_cache_dir = /var/lib/glance/image-cache/
 
+[paste_deploy]
+flavor = keystone
+
 [keystone_authtoken]
 auth_host = <%= @keystone_api_ipaddress %>
 auth_port = <%= @keystone_admin_port %>
@@ -261,4 +264,3 @@ auth_protocol = http
 admin_tenant_name = <%= @service_tenant_name %>
 admin_user = <%= @service_user %>
 admin_password = <%= @service_pass %>
-

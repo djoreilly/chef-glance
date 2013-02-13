@@ -133,6 +133,9 @@ directory "/etc/glance" do
   mode "0700"
 end
 
+ks_admin_endpoint = get_access_endpoint("keystone", "keystone", "admin-api")
+ks_service_endpoint = get_access_endpoint("keystone", "keystone","service-api")
+
 template "/etc/glance/glance-registry.conf" do
   source "glance-registry.conf.erb"
   owner "root"
@@ -146,7 +149,14 @@ template "/etc/glance/glance-registry.conf" do
     "db_password" => node["glance"]["db"]["password"],
     "db_name" => node["glance"]["db"]["name"],
     "use_syslog" => node["glance"]["syslog"]["use"],
-    "log_facility" => node["glance"]["syslog"]["facility"]
+    "log_facility" => node["glance"]["syslog"]["facility"],
+    "keystone_api_ipaddress" => ks_admin_endpoint["host"],
+    "keystone_service_port" => ks_service_endpoint["port"],
+    "keystone_admin_port" => ks_admin_endpoint["port"],
+    "keystone_admin_token" => keystone["admin_token"],
+    "service_tenant_name" => node["glance"]["service_tenant_name"],
+    "service_user" => node["glance"]["service_user"],
+    "service_pass" => node["glance"]["service_pass"]
     )
   notifies :run, resources(:execute => "glance-manage db_sync"), :immediately
 end
@@ -158,7 +168,9 @@ template "/etc/glance/glance-registry-paste.ini" do
   mode "0644"
   variables(
     "keystone_api_ipaddress" => ks_admin_endpoint["host"],
+    "keystone_service_port" => ks_service_endpoint["port"],
     "keystone_admin_port" => ks_admin_endpoint["port"],
+    "keystone_admin_token" => keystone["admin_token"],
     "service_tenant_name" => node["glance"]["service_tenant_name"],
     "service_user" => node["glance"]["service_user"],
     "service_pass" => node["glance"]["service_pass"]

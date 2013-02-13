@@ -68,12 +68,13 @@ syslog_log_facility = <%= @log_facility %>
 # key_file = /path/to/keyfile
 
 [paste_deploy]
+flavor = keystone
 
-[filter:authtoken]
+[keystone_authtoken]
 auth_host = <%= @keystone_api_ipaddress %>
 auth_port = <%= @keystone_admin_port %>
 auth_protocol = http
 admin_tenant_name = <%= @service_tenant_name %>
 admin_user = <%= @service_user %>
 admin_password = <%= @service_pass %>
-
+signing_dir = /var/run/glance
