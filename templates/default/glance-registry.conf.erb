@@ -68,7 +68,8 @@ syslog_log_facility = <%= @log_facility %>
 # key_file = /path/to/keyfile
 
 [paste_deploy]
-flavor = keystone
+#flavor = keystone
+config_file = /etc/glance/glance-registry-paste.ini
 
 [keystone_authtoken]
 auth_host = <%= @keystone_api_ipaddress %>
